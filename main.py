@@ -1,5 +1,5 @@
 import asyncio
-import core_logic # Nama file .so Anda (tanpa ekstensi)
+import core_encrypted # Nama file .so Anda (tanpa ekstensi)
 import sys
 
 async def run_bot():
