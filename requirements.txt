@@ -1,0 +1,11 @@
+pyrogram
+tgcrypto
+aiohttp
+psutil
+python-dotenv
+aiohttp-socks
+pysocks
+asyncssh
+speedtest-cli
+nuitka
+dnspython
