@@ -1,11 +1,10 @@
 # Gunakan Python 3.10 versi slim agar ringan dan cepat
 FROM python:3.10-slim
 
-# Set working directory di dalam container
+# Set working directory
 WORKDIR /app
 
-# Install dependency sistem yang WAJIB ada untuk library 'tgcrypto' dan 'psutil'
-# Kami juga menambahkan 'ffmpeg' karena bot Telegram biasanya memerlukannya untuk media
+# Install dependency sistem (Wajib untuk tgcrypto, psutil, dan media)
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
@@ -13,24 +12,24 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# --- BAGIAN PENTING UNTUK KECEPATAN ---
-# Copy requirements.txt DULUAN sebelum copy file lain.
-# Ini agar Docker melakukan "Caching". Saat Anda cuma ganti .env,
-# Docker TIDAK AKAN install ulang pip (hemat waktu 2-3 menit).
+# Copy requirements.txt duluan untuk Caching
 COPY requirements.txt .
 
 # Install library Python
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy sisa semua file, TERMASUK .env dan main.py Anda
+# Copy semua file biner dan loader
+# Pastikan di folder repo Anda ada: run.py, secrets.so, core_logic.so
 COPY . .
 
-# Set variabel PORT default ke 8080 (sesuai script Anda)
+# Set variabel PORT ke 8080
 ENV PORT=8080
 
-# Buka port 8080 agar Koyeb bisa mendeteksi bot "Healthy"
+# Buka port 8080 untuk Health Check
 EXPOSE 8080
 
-# Jalankan script (Pastikan nama file script Anda sudah diubah jadi main.py)
+# --- PERUBAHAN DI SINI ---
+# Jalankan run.py (Loader) sebagai pintu masuk utama, 
+# bukan main.py yang lama atau core_logic.so
 CMD ["python", "main.py"]
