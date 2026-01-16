@@ -1,20 +1,38 @@
-name: Koyeb Permanent Update
+name: Multi-Account Koyeb Update
 
 on:
   push:
     branches:
-      - main  # Ganti jika nama branch utama Anda bukan 'main'
+      - main
     paths:
       - 'main.py'
       - 'core_encrypted.so'
-  workflow_dispatch:
+  workflow_dispatch: # Memunculkan tombol manual di tab Actions
 
 jobs:
-  redeploy:
+  redeploy-all:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Koyeb Redeploy
+      # --- AKUN 1 ---
+      - name: Redeploy Account 1
+        if: false  # GANTI ke 'false' untuk melewati akun ini
         run: |
           curl -X POST https://app.koyeb.com/v1/services/${{ secrets.KOYEB1_SERVICE_ID }}/redeploy \
           -H "Authorization: Bearer ${{ secrets.KOYEB1_API_KEY }}" \
+          -H "Content-Type: application/json"
+
+      # --- AKUN 2 ---
+      - name: Redeploy Account 2
+        if: true  # GANTI ke 'false' untuk melewati akun ini
+        run: |
+          curl -X POST https://app.koyeb.com/v1/services/${{ secrets.KOYEB2_SERVICE_ID }}/redeploy \
+          -H "Authorization: Bearer ${{ secrets.KOYEB2_API_KEY }}" \
+          -H "Content-Type: application/json"
+
+      # --- AKUN 3 ---
+      - name: Redeploy Account 3
+        if: true  # GANTI ke 'false' untuk melewati akun ini
+        run: |
+          curl -X POST https://app.koyeb.com/v1/services/${{ secrets.KOYEB3_SERVICE_ID }}/redeploy \
+          -H "Authorization: Bearer ${{ secrets.KOYEB3_API_KEY }}" \
           -H "Content-Type: application/json"
