@@ -1,0 +1,19 @@
+name: Koyeb Permanent Update
+
+on:
+  push:
+    branches:
+      - main  # Ganti jika nama branch utama Anda bukan 'main'
+    paths:
+      - 'main.py'
+      - 'core_encrypted.so'
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Koyeb Redeploy
+        run: |
+          curl -X POST https://app.koyeb.com/v1/services/${{ secrets.KOYEB1_SERVICE_ID }}/redeploy \
+          -H "Authorization: Bearer ${{ secrets.KOYEB1_API_KEY }}" \
+          -H "Content-Type: application/json"
